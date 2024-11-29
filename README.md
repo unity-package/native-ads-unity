@@ -64,18 +64,52 @@ Force resolve the dependencies from Assets/External Dependency Manager/Android R
 ```csharp
         public NativeAdHolder nativeAdHolder;
 
+        /// <summary>
+        ///  Fetch and show Native Ad
+        /// </summary>
         public void FetchAd()
         {
             nativeAdHolder.FetchAd();
         }
 
+        /// <summary>
+        /// Hide visual NativeAd and show PlaceHolder
+        /// </summary>
         public void BlockAd()
         {
             nativeAdHolder.Block();
         }
 
+        /// <summary>
+        /// Show visual NativeAd and hide PlaceHolder
+        /// </summary>
         public void ActiveAd()
         {
             nativeAdHolder.Active();
         }
 ```
+
+Note: In some cases the click goes through the popup and triggers the NativeAd, call the `Block` method to prevent this. The `Active` method is the opposite of `Block`
+
+### 2. Tracking revenue
+
+```csharp
+        public NativeAdHolder nativeAdHolder;
+        
+        private void OnEnable()
+        {
+            nativeAdHolder.Event_OnAdPaid += OnAdPaid;
+        }
+
+        private void OnDisable()
+        {
+            nativeAdHolder.Event_OnAdPaid -= OnAdPaid;
+        }
+
+        private void OnAdPaid(AdValue adValue)
+        {
+            Debug.Log(adValue.CurrencyCode);
+            Debug.Log(adValue.Value);
+        }
+```
+- Use the `Event OnAdPaid` event to register a callback to perform tracking
